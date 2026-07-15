@@ -1,0 +1,8 @@
+{
+  "appId": "com.jindal.fabricationtracker",
+  "appName": "\u0016\u0016Jindal Steel Fabrication Tracker",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
