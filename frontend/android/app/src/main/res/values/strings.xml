@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Jindal Steel Fabrication Tracker</string>
-    <string name="title_activity_main">Jindal Steel Fabrication Tracker</string>
+    <string name="app_name">Jindal Steel Fabrication Tracker</string>
+    <string name="title_activity_main">Jindal Steel Fabrication Tracker</string>
     <string name="package_name">com.jindal.fabricationtracker</string>
     <string name="custom_url_scheme">com.jindal.fabricationtracker</string>
 </resources>
