@@ -20,6 +20,10 @@ jobs:
           node-version: '22'
 
       - name: Install Dependencies & Build Web
+        env:
+          VITE_API_BASE_URL: https://dept-photo-alerts-backend.onrender.com
+          VITE_SUPABASE_URL: https://mexuakzsqjsayeiiezot.supabase.co
+          VITE_SUPABASE_ANON_KEY: sb_publishable_73gjUKUF-BrrIpGpYV45ow_Jw9dJuXy
         run: |
           cd frontend
           npm install
