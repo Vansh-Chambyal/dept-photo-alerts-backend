@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { api } from "../api";
 import { useAuth } from "../AuthContext";
 import AdminTabs from "../components/AdminTabs";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 export default function SendPhoto() {
   const { token } = useAuth();
   const [departments, setDepartments] = useState([]);
   const [departmentId, setDepartmentId] = useState("");
   const [caption, setCaption] = useState("");
-  const [file, setFile] = useState(null);
+  const [fileBlob, setFileBlob] = useState(null);
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
@@ -21,29 +22,53 @@ export default function SendPhoto() {
       .catch(() => setError("Could not load departments."));
   }, []);
 
-  function handleFile(e) {
-    const f = e.target.files?.[0];
-    setFile(f || null);
-    setPreview(f ? URL.createObjectURL(f) : null);
+  // Triggered when tapping the "Tap to take or choose a photo" card
+  async function selectImage() {
+    setError("");
+    try {
+      const image = await Camera.getPhoto({
+        quality: 70, // Compresses the file, dropping it from ~15MB to ~1MB
+        allowEditing: false,
+        resultType: CameraResultType.Uri, // Safely loads URI instead of heavy Base64
+        source: CameraSource.Prompt, // Let's user choose: Take Photo or Choose from Gallery
+      });
+
+      if (image && image.webPath) {
+        setPreview(image.webPath);
+
+        // Convert the local file path into a safe Blob for upload
+        const response = await fetch(image.webPath);
+        const blob = await response.blob();
+        setFileBlob(blob);
+      }
+    } catch (err) {
+      // Handles user canceling the camera/gallery picker
+      console.log("Camera canceled or failed", err);
+    }
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setStatus("");
-    if (!file || !departmentId) {
+    
+    if (!fileBlob || !departmentId) {
       setError("Pick a department and a photo first.");
       return;
     }
+    
     setSending(true);
     try {
       const formData = new FormData();
       formData.append("department_id", departmentId);
       if (caption) formData.append("caption", caption);
-      formData.append("file", file);
+      
+      // Send our optimized Blob file
+      formData.append("file", fileBlob, "upload.jpg");
+
       await api.sendPhoto(formData, token);
       setStatus("Sent — everyone in that department has been notified.");
-      setFile(null);
+      setFileBlob(null);
       setPreview(null);
       setCaption("");
       setDepartmentId("");
@@ -73,26 +98,19 @@ export default function SendPhoto() {
           </select>
         </div>
 
-        <label htmlFor="photo">
+        {/* Tapping this container now launches the native Mobile camera prompt */}
+        <div onClick={selectImage} style={{ cursor: "pointer" }}>
           {preview ? (
             <img src={preview} alt="Selected" className="image-preview" />
           ) : (
             <div className="image-picker">
               <p>Tap to take or choose a photo</p>
-              <p>JPEG, PNG, or WEBP — up to 8MB</p>
+              <p>Auto-optimized for rapid high-speed upload</p>
             </div>
           )}
-        </label>
-        <input
-          id="photo"
-          type="file"
-          accept="image/*"
-          capture="environment"
-          onChange={handleFile}
-          style={{ display: "none" }}
-        />
+        </div>
 
-        <div className="field">
+        <div className="field" style={{ marginTop: "1rem" }}>
           <label htmlFor="caption">Caption (optional)</label>
           <input
             id="caption"
