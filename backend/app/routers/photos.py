@@ -18,7 +18,7 @@ router = APIRouter(prefix="/photos", tags=["photos"])
 _supabase = create_client(settings.supabase_url, settings.supabase_service_key)
 
 ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
-MAX_BYTES = 8 * 1024 * 1024  # 8MB cap — keeps the free 1GB Supabase Storage bucket lasting longer
+MAX_BYTES = 25 * 1024 * 1024  # 25MB cap — allows uncompressed HD iPhone photos
 
 
 @router.post("/send", response_model=PhotoOut)
@@ -33,7 +33,7 @@ async def send_photo(
         raise HTTPException(status_code=400, detail="Only JPEG, PNG, or WEBP images are allowed.")
     data = await file.read()
     if len(data) > MAX_BYTES:
-        raise HTTPException(status_code=400, detail="Image is too large (max 8MB).")
+        raise HTTPException(status_code=400, detail="Image is too large (max 25MB).")
 
     dept = await db.get(Department, department_id)
     if dept is None:
@@ -81,7 +81,7 @@ async def list_photos(db: AsyncSession = Depends(get_db), current: User = Depend
 async def delete_photo(
     photo_id: uuid.UUID, 
     db: AsyncSession = Depends(get_db), 
-    admin: User = Depends(require_admin) # This handles the security check automatically!
+    admin: User = Depends(require_admin)
 ):
     # 1. Find the photo in the database
     photo = await db.get(Photo, photo_id)
@@ -90,8 +90,6 @@ async def delete_photo(
         
     # 2. Extract the file path and delete it from the Supabase Storage Bucket
     try:
-        # The URL looks like: https://.../storage/v1/object/public/bucket_name/department_id/filename.jpg
-        # We split by the bucket name to isolate the file path for deletion
         path_parts = photo.image_url.split(f"/{settings.supabase_bucket}/")
         if len(path_parts) > 1:
             storage_path = path_parts[1]
