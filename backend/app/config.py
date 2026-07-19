@@ -16,12 +16,15 @@ class Settings(BaseSettings):
     # Firebase Console -> Project Settings -> Service Accounts -> Generate new private key.
     # Save the downloaded JSON in this backend folder and point this at its filename.
     firebase_credentials_path: str = "firebase-service-account.json"
+    firebase_credentials_json: str | None = None
 
     # Any long random string. Generate one with:
     #   python -c "import secrets; print(secrets.token_hex(32))"
     jwt_secret: str
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 60 * 24 * 30  # 30 days — internal tool, avoid re-login friction
+
+    
 
 
 settings = Settings()
