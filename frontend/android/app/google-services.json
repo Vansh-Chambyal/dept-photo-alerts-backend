@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "218100958797",
+    "project_id": "photo-alert-app",
+    "storage_bucket": "photo-alert-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218100958797:android:e9b041b5c80f1481d5be04",
+        "android_client_info": {
+          "package_name": "com.jindal.fabricationtracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJtN5k2CBf6o9YbRW8vilP0tatxdNE3EA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
