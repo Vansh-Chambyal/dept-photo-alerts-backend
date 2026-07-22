@@ -12,13 +12,17 @@ export default function NavBar() {
 
   return (
     <nav className="navbar">
-      {/* 1. Make the logo a clickable link back to the feed (/) */}
-      <Link to="/" className="navbar-brand" style={{ textDecoration: 'none', color: 'inherit', fontWeight: 'bold' }}>
+      {/* Added the logo image next to the brand text */}
+      <Link to="/" className="navbar-brand" style={{ textDecoration: 'none', color: 'inherit', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <img 
+          src="/Jindal Steel Logo 2025.jpg" 
+          alt="Jindal Steel Logo" 
+          style={{ height: '30px', width: 'auto', borderRadius: '4px' }} 
+        />
         Jindal Steel Fabrication Tracker {user?.is_admin && <span className="badge">ADMIN</span>}
       </Link>
 
       <div className="navbar-links">
-        {/* 2. Add a direct Feed button for easy navigation */}
         {user && <Link to="/" style={{ marginRight: '15px' }}>Feed</Link>}
         
         {user?.is_admin && (

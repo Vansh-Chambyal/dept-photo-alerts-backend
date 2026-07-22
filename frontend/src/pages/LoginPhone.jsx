@@ -33,8 +33,18 @@ export default function LoginPhone() {
 
   return (
     <div className="screen-centered">
-      <p className="eyebrow">Dept Photo Alerts</p>
-      <h1>Sign in with your phone</h1>
+      {/* Inserted Logo */}
+      <img 
+        src="/Jindal Steel Logo 2025.jpg" 
+        alt="Jindal Steel Fabrication Logo" 
+        className="login-logo" 
+        style={{ maxWidth: '250px', margin: '0 auto 20px', display: 'block' }} 
+      />
+      
+      {/* Updated Title */}
+      <h1>Jindal Steel Fabrication tracker</h1>
+      <p className="eyebrow">Sign in with your phone</p>
+      
       <p>Enter the number your administrator has on file.</p>
       <form onSubmit={handleSubmit}>
         <div className="field">

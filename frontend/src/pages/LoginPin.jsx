@@ -31,6 +31,14 @@ export default function LoginPin() {
 
   return (
     <div className="screen-centered">
+      {/* Inserted Logo */}
+      <img 
+        src="/Jindal Steel Logo 2025.jpg" 
+        alt="Jindal Steel Fabrication Logo" 
+        className="login-logo" 
+        style={{ maxWidth: '250px', margin: '0 auto 20px', display: 'block' }} 
+      />
+      
       <p className="eyebrow">{phone}</p>
       <h1>Enter your PIN</h1>
       <p>Welcome back.</p>
